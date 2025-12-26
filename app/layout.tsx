@@ -16,32 +16,32 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: 'Kemiri Cafe - Setiap Tegukan Menyimpan Cerita',
-  description: 'Nikmati kopi premium dengan suasana yang menenangkan di Kemiri Cafe. Setiap cangkir diracik dengan dedikasi dan rasa yang tak terlupakan. Pesan online sekarang!',
-  keywords: 'kafe, kopi, coffee shop, pesan online, cafe jakarta, kopi premium, makanan ringan, suasana tenang',
-  authors: [{ name: 'Kemiri Cafe' }],
-  creator: 'Kemiri Cafe',
-  publisher: 'Kemiri Cafe',
+  title: 'Wakop Kemiri - Warkop Terdekat di Cijenuk, Cililin, Citalem | Kopi Pilihan dengan Suasana Nyaman',
+  description: 'Temukan warkop terdekat di Cijenuk, Cililin, dan Citalem. Nikmati kopi premium di Wakop Kemiri dengan suasana yang menenangkan. Tempat nongkrong asyik dengan menu lengkap.',
+  keywords: 'wakop kemiri, warkop terdekat, warkop cijenuk, cililin, citalem, kafe, kopi, coffee shop, tempat nongkrong, menu kopi, harga kopi, tempat makan, suasana tenang, pesan online',
+  authors: [{ name: 'Wakop Kemiri' }],
+  creator: 'Wakop Kemiri',
+  publisher: 'Wakop Kemiri',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kemiricafe.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://wakopkemiri.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Kemiri Cafe - Setiap Tegukan Menyimpan Cerita',
-    description: 'Nikmati kopi premium dengan suasana yang menenangkan. Setiap cangkir diracik dengan dedikasi dan rasa yang tak terlupakan.',
-    url: 'https://kemiricafe.com',
-    siteName: 'Kemiri Cafe',
+    title: 'Wakop Kemiri - Warkop Terdekat di Cijenuk, Cililin, Citalem',
+    description: 'Temukan warkop terdekat di Cijenuk, Cililin, dan Citalem. Nikmati kopi premium di Wakop Kemiri dengan suasana yang menenangkan.',
+    url: 'https://wakopkemiri.com',
+    siteName: 'Wakop Kemiri',
     images: [
       {
         url: 'https://images.unsplash.com/photo-1605468596782-502ce2012ef0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTAwNDR8MHwxfHNlYXJjaHwxfHxjb2ZmZWUlMjBjdXAlMjBzdGVhbSUyMHdvb2RlbiUyMHRhYmxlfGVufDB8MHx8fDE3NjE2MzU4ODR8MA&ixlib=rb-4.1.0&q=85',
         width: 1200,
         height: 630,
-        alt: 'Kemiri Cafe - Premium Coffee Experience',
+        alt: 'Wakop Kemiri - Warkop Terdekat di Cijenuk, Cililin, Citalem',
       },
     ],
     locale: 'id_ID',
@@ -49,10 +49,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kemiri Cafe - Setiap Tegukan Menyimpan Cerita',
-    description: 'Nikmati kopi premium dengan suasana yang menenangkan. Setiap cangkir diracik dengan dedikasi dan rasa yang tak terlupakan.',
+    title: 'Wakop Kemiri - Warkop Terdekat di Cijenuk, Cililin, Citalem',
+    description: 'Temukan warkop terdekat di Cijenuk, Cililin, dan Citalem. Nikmati kopi premium di Wakop Kemiri dengan suasana yang menenangkan.',
     images: ['https://images.unsplash.com/photo-1605468596782-502ce2012ef0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTAwNDR8MHwxfHNlYXJjaHwxfHxjb2ZmZWUlMjBjdXAlMjBzdGVhbSUyMHdvb2RlbiUyMHRhYmxlfGVufDB8MHx8fDE3NjE2MzU4ODR8MA&ixlib=rb-4.1.0&q=85'],
-    creator: '@kemiricafe',
+    creator: '@wakopkemiri',
   },
   robots: {
     index: true,
