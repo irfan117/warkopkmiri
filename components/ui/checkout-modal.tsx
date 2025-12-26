@@ -103,6 +103,7 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
                     customer_name: name,
                     total_amount: total,
                     status: 'menunggu_pembayaran',
+                    order_type: 'dine_in',
                 })
                 .select()
                 .single()
@@ -146,6 +147,36 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
         setSubmitting(true)
 
         try {
+            // Save delivery order to database first
+            const { data: order, error: orderError } = await supabase
+                .from('orders')
+                .insert({
+                    customer_name: name,
+                    total_amount: total,
+                    status: 'menunggu_pembayaran',
+                    order_type: 'delivery',
+                    delivery_address: address,
+                })
+                .select()
+                .single()
+
+            if (orderError) throw orderError
+
+            // Create order items
+            const orderItems = cart.map((item) => ({
+                order_id: order.id,
+                menu_id: item.menu.id,
+                quantity: item.quantity,
+                price: item.menu.price,
+                subtotal: item.menu.price * item.quantity,
+            }))
+
+            const { error: itemsError } = await supabase
+                .from('order_items')
+                .insert(orderItems)
+
+            if (itemsError) throw itemsError
+
             // Format WhatsApp number (remove non-digits and ensure it starts with country code)
             let formattedNumber = whatsappNumber.replace(/\D/g, '')
             if (formattedNumber.startsWith('0')) {
@@ -158,7 +189,7 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
             // Open WhatsApp in new tab
             window.open(whatsappUrl, '_blank')
 
-            toast.success('Mengarahkan ke WhatsApp...')
+            toast.success('Pesanan tersimpan! Mengarahkan ke WhatsApp...')
 
             // Reset form and close modal
             resetForm()

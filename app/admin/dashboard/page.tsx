@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from 'sonner'
-import { RefreshCw } from 'lucide-react'
+import { RefreshCw, Truck, Store } from 'lucide-react'
 
 type Order = {
   id: string
@@ -16,6 +16,8 @@ type Order = {
   status: 'menunggu_pembayaran' | 'dibayar' | 'selesai'
   total_amount: number
   created_at: string
+  order_type?: 'dine_in' | 'delivery'
+  delivery_address?: string
 }
 
 type OrderWithItems = Order & {
@@ -29,6 +31,7 @@ type OrderWithItems = Order & {
 export default function AdminDashboardPage() {
   const [orders, setOrders] = useState<OrderWithItems[]>([])
   const [loading, setLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<'dine_in' | 'delivery'>('dine_in')
 
   useEffect(() => {
     fetchOrders()
@@ -47,7 +50,7 @@ export default function AdminDashboardPage() {
           console.log('Order changed:', payload)
           // Refresh orders saat ada perubahan
           fetchOrders()
-          
+
           // Show notification untuk pesanan baru
           if (payload.eventType === 'INSERT') {
             toast.success('Pesanan baru masuk!', {
@@ -140,7 +143,19 @@ export default function AdminDashboardPage() {
   }
 
   const filterOrders = (status: string) => {
-    return orders.filter((order) => order.status === status)
+    return orders.filter((order) => {
+      const matchesStatus = order.status === status
+      const orderType = order.order_type || 'dine_in' // default to dine_in for old orders
+      const matchesType = orderType === viewMode
+      return matchesStatus && matchesType
+    })
+  }
+
+  const getTotalOrdersByType = () => {
+    return orders.filter((order) => {
+      const orderType = order.order_type || 'dine_in'
+      return orderType === viewMode
+    }).length
   }
 
   const getStatusBadge = (status: string) => {
@@ -166,139 +181,169 @@ export default function AdminDashboardPage() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold">Dashboard Admin</h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">
-            Kelola pesanan dan pantau status pembayaran
+            {viewMode === 'dine_in' ? 'Kelola pesanan di tempat' : 'Kelola pesanan delivery'}
             <span className="ml-2 text-xs text-green-600">● Real-time</span>
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={fetchOrders}
-          disabled={loading}
-          className="w-full sm:w-auto"
-        >
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant={viewMode === 'dine_in' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('dine_in')}
+            className="flex-1 sm:flex-initial"
+          >
+            <Store className="h-4 w-4 mr-2" />
+            Di Tempat
+          </Button>
+          <Button
+            variant={viewMode === 'delivery' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setViewMode('delivery')}
+            className="flex-1 sm:flex-initial"
+          >
+            <Truck className="h-4 w-4 mr-2" />
+            Delivery
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchOrders}
+            disabled={loading}
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
       </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Menunggu Pembayaran</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold text-red-600">
-                {filterOrders('menunggu_pembayaran').length}
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Dibayar</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold text-blue-600">
-                {filterOrders('dibayar').length}
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Selesai</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold text-green-600">
-                {filterOrders('selesai').length}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Menunggu Pembayaran</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-red-600">
+              {filterOrders('menunggu_pembayaran').length}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Dibayar</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-blue-600">
+              {filterOrders('dibayar').length}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Selesai</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold text-green-600">
+              {filterOrders('selesai').length}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
 
-        <Tabs defaultValue="menunggu_pembayaran" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 h-auto">
-            <TabsTrigger value="menunggu_pembayaran" className="text-xs sm:text-sm px-2 sm:px-4 py-2">
-              <span className="hidden sm:inline">Menunggu Pembayaran</span>
-              <span className="sm:hidden">Menunggu</span>
-            </TabsTrigger>
-            <TabsTrigger value="dibayar" className="text-xs sm:text-sm px-2 sm:px-4 py-2">
-              Dibayar
-            </TabsTrigger>
-            <TabsTrigger value="selesai" className="text-xs sm:text-sm px-2 sm:px-4 py-2">
-              Selesai
-            </TabsTrigger>
-          </TabsList>
+      <Tabs defaultValue="menunggu_pembayaran" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3 h-auto">
+          <TabsTrigger value="menunggu_pembayaran" className="text-xs sm:text-sm px-2 sm:px-4 py-2">
+            <span className="hidden sm:inline">Menunggu Pembayaran</span>
+            <span className="sm:hidden">Menunggu</span>
+          </TabsTrigger>
+          <TabsTrigger value="dibayar" className="text-xs sm:text-sm px-2 sm:px-4 py-2">
+            Dibayar
+          </TabsTrigger>
+          <TabsTrigger value="selesai" className="text-xs sm:text-sm px-2 sm:px-4 py-2">
+            Selesai
+          </TabsTrigger>
+        </TabsList>
 
-          {['menunggu_pembayaran', 'dibayar', 'selesai'].map((status) => (
-            <TabsContent key={status} value={status}>
-              <div className="space-y-4">
-                {filterOrders(status).map((order) => (
-                  <Card key={order.id}>
-                    <CardHeader>
-                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
-                        <div className="flex-1">
-                          <CardTitle className="text-lg sm:text-xl">Meja {order.table_number}</CardTitle>
-                          {order.customer_name && (
-                            <p className="text-sm text-gray-600 mt-1">{order.customer_name}</p>
-                          )}
-                          <p className="text-xs text-gray-500 mt-1">
-                            {new Date(order.created_at).toLocaleString('id-ID')}
-                          </p>
-                        </div>
-                        <Badge {...getStatusBadge(order.status)} className="self-start sm:self-auto">
-                          {getStatusBadge(order.status).label}
-                        </Badge>
+        {['menunggu_pembayaran', 'dibayar', 'selesai'].map((status) => (
+          <TabsContent key={status} value={status}>
+            <div className="space-y-4">
+              {filterOrders(status).map((order) => (
+                <Card key={order.id}>
+                  <CardHeader>
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                      <div className="flex-1">
+                        {viewMode === 'dine_in' ? (
+                          <CardTitle className="text-lg sm:text-xl">
+                            {order.table_number ? `Meja ${order.table_number}` : 'Pesan di Tempat'}
+                          </CardTitle>
+                        ) : (
+                          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+                            <Truck className="h-5 w-5 text-blue-600" />
+                            Delivery
+                          </CardTitle>
+                        )}
+                        {order.customer_name && (
+                          <p className="text-sm text-gray-600 mt-1">👤 {order.customer_name}</p>
+                        )}
+                        {viewMode === 'delivery' && order.delivery_address && (
+                          <p className="text-sm text-gray-500 mt-1">📍 {order.delivery_address}</p>
+                        )}
+                        <p className="text-xs text-gray-500 mt-1">
+                          {new Date(order.created_at).toLocaleString('id-ID')}
+                        </p>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2 mb-4">
-                        {order.items.map((item, idx) => (
-                          <div key={idx} className="flex justify-between text-sm">
-                            <span>
-                              {item.quantity}x {item.menu.name}
-                            </span>
-                            <span>Rp {item.subtotal.toLocaleString('id-ID')}</span>
-                          </div>
-                        ))}
-                        <div className="border-t pt-2 flex justify-between font-bold">
-                          <span>Total</span>
-                          <span className="text-blue-600">
-                            Rp {order.total_amount.toLocaleString('id-ID')}
+                      <Badge {...getStatusBadge(order.status)} className="self-start sm:self-auto">
+                        {getStatusBadge(order.status).label}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 mb-4">
+                      {order.items.map((item, idx) => (
+                        <div key={idx} className="flex justify-between text-sm">
+                          <span>
+                            {item.quantity}x {item.menu.name}
                           </span>
+                          <span>Rp {item.subtotal.toLocaleString('id-ID')}</span>
                         </div>
+                      ))}
+                      <div className="border-t pt-2 flex justify-between font-bold">
+                        <span>Total</span>
+                        <span className="text-blue-600">
+                          Rp {order.total_amount.toLocaleString('id-ID')}
+                        </span>
                       </div>
-                      <div className="flex gap-2">
-                        {order.status === 'menunggu_pembayaran' && (
-                          <Button
-                            className="flex-1 bg-green-600 hover:bg-green-700"
-                            onClick={() => updateOrderStatus(order.id, 'dibayar')}
-                          >
-                            Tandai Dibayar
-                          </Button>
-                        )}
-                        {order.status === 'dibayar' && (
-                          <Button
-                            className="flex-1 bg-blue-600 hover:bg-blue-700"
-                            onClick={() => updateOrderStatus(order.id, 'selesai')}
-                          >
-                            Tandai Selesai
-                          </Button>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-                {filterOrders(status).length === 0 && (
-                  <Card>
-                    <CardContent className="py-8 text-center text-gray-500">
-                      Tidak ada pesanan dengan status ini
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+                    </div>
+                    <div className="flex gap-2">
+                      {order.status === 'menunggu_pembayaran' && (
+                        <Button
+                          className="flex-1 bg-green-600 hover:bg-green-700"
+                          onClick={() => updateOrderStatus(order.id, 'dibayar')}
+                        >
+                          Tandai Dibayar
+                        </Button>
+                      )}
+                      {order.status === 'dibayar' && (
+                        <Button
+                          className="flex-1 bg-blue-600 hover:bg-blue-700"
+                          onClick={() => updateOrderStatus(order.id, 'selesai')}
+                        >
+                          Tandai Selesai
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {filterOrders(status).length === 0 && (
+                <Card>
+                  <CardContent className="py-8 text-center text-gray-500">
+                    Tidak ada pesanan dengan status ini
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   )
 }
