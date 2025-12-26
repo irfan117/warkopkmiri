@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
-import { 
-  LayoutDashboard, 
-  Menu as MenuIcon, 
-  TrendingUp, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  Menu as MenuIcon,
+  TrendingUp,
+  LogOut,
   Coffee,
   X,
   AlignJustify,
@@ -108,7 +108,12 @@ export default function AdminLayout({
       setLoading(false)
     } catch (error) {
       console.error('Auth check error:', error)
-      toast.error('Terjadi kesalahan saat memeriksa autentikasi.')
+      // Check if it's likely a configuration error
+      if (error instanceof Error && (error.message.includes('supabaseUrl') || error.message.includes('supabaseKey'))) {
+        toast.error('Konfigurasi Supabase tidak valid. Harap periksa environment variables.')
+      } else {
+        toast.error('Terjadi kesalahan saat memeriksa autentikasi.')
+      }
       router.push('/admin/login')
     }
   }
