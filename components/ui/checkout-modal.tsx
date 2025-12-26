@@ -235,13 +235,15 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-            <DialogContent className="w-[95vw] sm:max-w-md">
+            <DialogContent className="w-[95vw] sm:max-w-md rounded-[2rem] border-4 border-[#E2F0CB] shadow-xl bg-white/95 backdrop-blur-sm">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <ShoppingCart className="h-5 w-5 text-amber-600" />
+                    <DialogTitle className="flex items-center gap-3 text-2xl text-[#4A2C1A]">
+                        <div className="p-2 bg-[#FFDAC1] rounded-full">
+                            <ShoppingCart className="h-6 w-6 text-[#2C1810]" />
+                        </div>
                         Konfirmasi Pesanan
                     </DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription className="text-gray-500 font-medium">
                         Lengkapi data berikut untuk melanjutkan pesanan
                     </DialogDescription>
                 </DialogHeader>
@@ -255,6 +257,7 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Masukkan nama Anda"
                             required
+                            className="rounded-xl border-2 border-[#E2F0CB] focus:border-[#FF9AA2] focus:ring-[#FF9AA2] bg-[#FDF6F0]"
                         />
                     </div>
 
@@ -265,18 +268,18 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
                             onValueChange={(value) => setOrderType(value as 'dine_in' | 'delivery')}
                             className="space-y-2"
                         >
-                            <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-amber-50 transition-colors cursor-pointer">
-                                <RadioGroupItem value="dine_in" id="dine_in" />
+                            <div className="flex items-center space-x-3 p-4 border-2 border-[#E2F0CB] rounded-2xl hover:bg-[#FDF6F0] hover:border-[#FF9AA2] transition-all cursor-pointer group">
+                                <RadioGroupItem value="dine_in" id="dine_in" className="text-[#FF9AA2] border-[#FF9AA2]" />
                                 <Label htmlFor="dine_in" className="flex-1 cursor-pointer">
-                                    <span className="font-medium">🍽️ Pesan di Tempat</span>
-                                    <p className="text-sm text-gray-500">Makan langsung di cafe</p>
+                                    <span className="font-bold text-[#4A2C1A] text-lg">🍽️ Pesan di Tempat</span>
+                                    <p className="text-sm text-gray-500 group-hover:text-[#FF9AA2] transition-colors">Makan langsung di cafe</p>
                                 </Label>
                             </div>
-                            <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-amber-50 transition-colors cursor-pointer">
-                                <RadioGroupItem value="delivery" id="delivery" />
+                            <div className="flex items-center space-x-3 p-4 border-2 border-[#E2F0CB] rounded-2xl hover:bg-[#FDF6F0] hover:border-[#FF9AA2] transition-all cursor-pointer group">
+                                <RadioGroupItem value="delivery" id="delivery" className="text-[#FF9AA2] border-[#FF9AA2]" />
                                 <Label htmlFor="delivery" className="flex-1 cursor-pointer">
-                                    <span className="font-medium">🏠 Pesan dari Rumah</span>
-                                    <p className="text-sm text-gray-500">Diantar ke alamat Anda via WhatsApp</p>
+                                    <span className="font-bold text-[#4A2C1A] text-lg">🏠 Pesan dari Rumah</span>
+                                    <p className="text-sm text-gray-500 group-hover:text-[#FF9AA2] transition-colors">Diantar ke alamat Anda via WhatsApp</p>
                                 </Label>
                             </div>
                         </RadioGroup>
@@ -292,14 +295,15 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
                                 placeholder="Masukkan alamat lengkap Anda"
                                 rows={3}
                                 required
+                                className="rounded-xl border-2 border-[#E2F0CB] focus:border-[#FF9AA2] focus:ring-[#FF9AA2] bg-[#FDF6F0]"
                             />
                         </div>
                     )}
 
                     <div className="pt-2 border-t">
                         <div className="flex justify-between text-lg font-bold mb-4">
-                            <span>Total Pesanan</span>
-                            <span className="text-amber-600">Rp {total.toLocaleString('id-ID')}</span>
+                            <span className="text-[#4A2C1A]">Total Pesanan</span>
+                            <span className="text-[#FF9AA2] text-2xl font-black">Rp {total.toLocaleString('id-ID')}</span>
                         </div>
 
                         <div className="flex gap-2">
@@ -316,36 +320,36 @@ export function CheckoutModal({ isOpen, onClose, onSuccess, cart, total }: Check
                             {orderType === 'dine_in' ? (
                                 <Button
                                     type="submit"
-                                    className="flex-1 bg-amber-600 hover:bg-amber-700 text-white"
+                                    className="flex-1 h-12 rounded-full btn-primary bg-[#B5EAD7] hover:bg-[#A3D9C6] text-[#2C1810]"
                                     disabled={submitting}
                                 >
                                     {submitting ? (
                                         <span className="flex items-center gap-2">
-                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            <Loader2 className="h-5 w-5 animate-spin" />
                                             Memproses...
                                         </span>
                                     ) : (
-                                        <span className="flex items-center gap-2">
-                                            <ShoppingCart className="h-4 w-4" />
-                                            Pesan
+                                        <span className="flex items-center gap-2 font-bold text-lg">
+                                            <ShoppingCart className="h-5 w-5" />
+                                            Pesan Sekarang!
                                         </span>
                                     )}
                                 </Button>
                             ) : (
                                 <Button
                                     type="submit"
-                                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                                    className="flex-1 h-12 rounded-full btn-primary bg-[#B5EAD7] hover:bg-[#A3D9C6] text-[#2C1810]"
                                     disabled={submitting || (!whatsappNumber && !loading)}
                                 >
                                     {submitting ? (
                                         <span className="flex items-center gap-2">
-                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            <Loader2 className="h-5 w-5 animate-spin" />
                                             Memproses...
                                         </span>
                                     ) : (
-                                        <span className="flex items-center gap-2">
-                                            <MessageCircle className="h-4 w-4" />
-                                            Kirim via WhatsApp
+                                        <span className="flex items-center gap-2 font-bold text-lg">
+                                            <MessageCircle className="h-5 w-5" />
+                                            Kirim ke WhatsApp 🚀
                                         </span>
                                     )}
                                 </Button>

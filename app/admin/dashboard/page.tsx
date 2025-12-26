@@ -215,33 +215,33 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Menunggu Pembayaran</CardTitle>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-8">
+        <Card className="col-span-2 md:col-span-1 shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="p-4 md:p-6 pb-2">
+            <CardTitle className="text-sm md:text-lg font-medium text-gray-500">Menunggu</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold text-red-600">
+          <CardContent className="p-4 md:p-6 pt-0">
+            <p className="text-2xl md:text-4xl font-bold text-red-600">
               {filterOrders('menunggu_pembayaran').length}
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Dibayar</CardTitle>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="p-4 md:p-6 pb-2">
+            <CardTitle className="text-sm md:text-lg font-medium text-gray-500">Dibayar</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold text-blue-600">
+          <CardContent className="p-4 md:p-6 pt-0">
+            <p className="text-2xl md:text-4xl font-bold text-blue-600">
               {filterOrders('dibayar').length}
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Selesai</CardTitle>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="p-4 md:p-6 pb-2">
+            <CardTitle className="text-sm md:text-lg font-medium text-gray-500">Selesai</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold text-green-600">
+          <CardContent className="p-4 md:p-6 pt-0">
+            <p className="text-2xl md:text-4xl font-bold text-green-600">
               {filterOrders('selesai').length}
             </p>
           </CardContent>

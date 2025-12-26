@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* Kid Friendly Palette */
+  --kid-pink: #FF9AA2;
+  --kid-melon: #FFB7B2;
+  --kid-orange: #FFDAC1;
+  --kid-yellow: #E2F0CB;
+  --kid-mint: #B5EAD7;
+  --kid-blue: #C7CEEA;
+  --kid-cream: #FDF6F0;
   
-  /* Custom color palette */
-  --coffee-dark: #2C1810;
-  --coffee-brown: #4A2C1A;
-  --coffee-medium: #8B5A3C;
-  --coffee-light: #C4A57B;
-  --cream: #F5E6D3;
-  --gold: #D4AF37;
-  --amber-glow: #FFC107;
+  --foreground-rgb: 74, 74, 74;
+  --background-start-rgb: 253, 246, 240;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,11 +87,11 @@
   
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-family: var(--font-quicksand), sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-playfair), serif;
+    font-family: var(--font-fredoka), cursive;
   }
 }
 
@@ -233,54 +233,37 @@
     background-clip: text;
   }
 
-  /* Custom Button Styles - Coffee Theme */
   .btn-primary {
-    background: linear-gradient(135deg, #B45309 0%, #92400E 50%, #78350F 100%);
+    background: linear-gradient(135deg, #FF9AA2 0%, #FFB7B2 100%);
+    border: 3px solid #FFF;
     color: white;
-    box-shadow: 0 4px 14px 0 rgba(180, 83, 9, 0.25);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: var(--font-fredoka), cursive;
+    font-weight: 600;
+    box-shadow: 0 4px 0 rgba(255, 154, 162, 0.4);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #92400E 0%, #78350F 50%, #713F12 100%);
-    box-shadow: 0 6px 20px 0 rgba(180, 83, 9, 0.35);
-    transform: translateY(-1px);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 0 rgba(255, 154, 162, 0.5);
   }
 
   .btn-primary:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px 0 rgba(180, 83, 9, 0.25);
+    transform: translateY(2px);
+    box-shadow: 0 0 0 rgba(255, 154, 162, 0.4);
   }
 
-  .btn-secondary {
-    border: 2px solid rgba(255, 107, 53, 0.4);
-    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(251, 146, 60, 0.1) 100%);
-    color: #FF8C42;
-    backdrop-filter: blur(8px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  .card-cute {
+    background: white;
+    border-radius: 2rem;
+    border: 3px solid #F0F0F0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
   }
 
-  .btn-secondary:hover {
-    border-color: rgba(255, 107, 53, 0.6);
-    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(251, 146, 60, 0.2) 100%);
-    color: #FFA366;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px 0 rgba(255, 107, 53, 0.25);
-  }
-
-  .btn-secondary:active {
-    transform: translateY(0);
-  }
-
-  /* Smooth button transitions */
-  button {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Better focus states for accessibility */
-  button:focus-visible {
-    outline: 2px solid rgba(251, 191, 36, 0.6);
-    outline-offset: 2px;
+  .card-cute:hover {
+    transform: translateY(-5px) rotate(1deg);
+    border-color: var(--kid-mint);
+    box-shadow: 0 12px 25px rgba(181, 234, 215, 0.4);
   }
 }
